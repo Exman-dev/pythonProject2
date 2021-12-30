@@ -255,7 +255,10 @@ def open():
                     k = int(input("Chose how many patients should form a group: "))
                     index = int(input("Give an Index: "))
                     n = 1
-                    for i in hospital.form_groups(index, k):
+                    rez = hospital.form_groups(index, k)
+                    if not rez:
+                        raise Exception("No groups found")
+                    for i in rez:
                         print("Group " + str(n) + ":")
                         n = n + 1
                         for j in i:
@@ -267,6 +270,8 @@ def open():
                     print(ve)
                 except IndexError as ie:
                     print(ie)
+                except Exception as e:
+                    print(e)
 
             elif command == 0:
                 print("Program closed")
