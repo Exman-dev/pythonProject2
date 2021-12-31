@@ -316,10 +316,18 @@ class HospitaRepository():
                     self.__department[i].setAux(1)
         return general_search(self.__department, lambda d1: d1.getAux() > 0)
 
+    def check_group(self, groups) -> bool:
+        for group in groups:
+            disease = ""
+            for patient in group:
+                if disease == "":
+                    disease = patient.getDs()
+                elif disease != patient.getDs():
+                    return False
+        return True
+
     def form_groups(self, index, k):
-        return(groups(self.__department[index].patients, k, lambda mygroups: [True if mygroups[0][0].getDs() == p.getDs() else False  for group in mygroups for p in group]))
-
-
+        return(groups(self.__department[index].patients, k, self.check_group))
 
 
 
