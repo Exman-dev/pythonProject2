@@ -366,15 +366,17 @@ class HospitaRepository():
         """
         return(groups(self.__department[index].patients, k, self.check_group))
 
+    def group_form(self, groups, p):
+        for group in groups:
+            m = 0
+            for department in group:
+                m += department.get_max_disease()
+            if m > p:
+                return False
+        return True
 
     def form_groups_2(self, k ,p):
-        list_group = []
-
-
-        for i in range (k):
-            #to do
-            list_group.append(groups(self.__department[i].patients, p, self.check_group2))
-        return list_group
+        return groups(self.__department, k, self.group_form, p)
 
 
 

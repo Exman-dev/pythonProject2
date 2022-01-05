@@ -7,10 +7,12 @@ import unittest
 import time
 
 if __name__ == "__main__":
+    """
     loader = unittest.TestLoader()
     suite = loader.discover("C:/Users/David/PycharmProjects/pythonProject2/tests", pattern="test_*.py")
     unittest.TextTestRunner(verbosity=2).run(suite)
     time.sleep(1)
+    """
 
 
 
