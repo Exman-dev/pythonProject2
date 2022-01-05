@@ -2,7 +2,11 @@ from domain.hospital import Department
 from domain.patients import Patients
 from general.generals import *
 class HospitaRepository():
-    def __init__(self, department_list):
+    def __init__(self, department_list = []):
+        """
+        Initializes the repository
+        :param department_list:
+        """
         self.__department = department_list.copy()
 
     def __str__(self):
@@ -22,6 +26,13 @@ class HospitaRepository():
         :return: The size of the department/patient list
         """
         return len(self.__department)
+
+    def get_all(self):
+        """
+        Prints all the departments and all their patients
+        :return:
+        """
+        return self.__department
 
 
 
@@ -182,7 +193,7 @@ class HospitaRepository():
 
     def sort_patients_by_pc(self, id, increasing):
         """
-        Sorts the patients by their personal code from a department indentified by their id
+        Sorts the patients by their personal code from a department identified by their id
         :param id:
         :param increasing:
         :return:
@@ -197,14 +208,14 @@ class HospitaRepository():
             print("There are no departments with the given id")
             return self.__department
         else:
-            if increasing == "increasing":
+            if increasing == 1:
                 return general_sort(self.__department[pos].patients, lambda p1, p2: p1.getPc() <= p2.getPc())
 
-            elif increasing == "decreasing":
+            elif increasing == 2:
                 return general_sort(self.__department[pos].patients, lambda p1, p2: p1.getPc() >= p2.getPc())
 
             else:
-                raise ValueError("The given input should be increasing or decreasing")
+                raise ValueError("The given input should be 1 or 2")
 
     def sort_departments_by_NoP(self, increasing):
         """
@@ -212,11 +223,13 @@ class HospitaRepository():
         :param increasing:
         :return:
         """
-        if increasing == "increasing":
+        if increasing == 1:
             return general_sort(self.__department, lambda d1, d2: d1.getNp() <= d2.getNp())
 
-        elif increasing == "decreasing":
+        elif increasing == 2:
             return general_sort(self.__department, lambda d1, d2: d1.getNp() >= d2.getNp())
+        else:
+            raise ValueError("The given input should be 1 or 2")
 
     def sort_departments_by_age(self, limit, increasing):
         """
@@ -231,11 +244,13 @@ class HospitaRepository():
                 if self.__department[i].patients[j].getAg() > limit:
                     k = k + 1
             self.__department[i].setAux(k)
-        if increasing == "increasing":
+        if increasing == 1:
             return general_sort(self.__department, lambda d1, d2: d1.getAux() <= d2.getAux())
 
-        elif increasing == "decreasing":
+        elif increasing == 2:
             return general_sort(self.__department, lambda d1, d2: d1.getAux() >= d2.getAux())
+        else:
+            raise ValueError("The given input should be 1 or 2")
 
     def reset_aux(self):
         """
@@ -247,28 +262,21 @@ class HospitaRepository():
 
         return self.__department
 
-    def sort_patients(self, id, increasing):
+    def sort_patients(self, i, increasing):
         """
         Sorts the patients by their last name and first name in an alphabetical order
         :param id:
         :param increasing:
         :return:
         """
-        ok = 0
 
-        for i in range(len(self.__department)):
-            if id == self.__department[i].getId():
-                ok = 1
-                pos = i
-        if ok == 0:
-            print("There are no departments with the given id")
-            return self.__department
+        if increasing == 1:
+            return general_sort(self.__department[i].patients, lambda d1, d2: d1.getName() <= d2.getName())
+
+        elif increasing == 2:
+            return general_sort(self.__department[i].patients, lambda d1, d2: d1.getName() >= d2.getName())
         else:
-            if increasing == "increasing":
-                return general_sort(self.__department[pos].patients, lambda d1, d2: d1.getName() <= d2.getName())
-
-            elif increasing == "decreasing":
-                return general_sort(self.__department[pos].patients, lambda d1, d2: d1.getName() >= d2.getName())
+            raise ValueError("The given input should be 1 or 2")
 
     def identify_department(self, limit):
         """
@@ -282,7 +290,7 @@ class HospitaRepository():
                 if self.__department[i].patients[j].getAg() < limit:
                     k = k + 1
             self.__department[i].setAux(k)
-        return str(general_search(self.__department, lambda d1: d1.getAux() > 0))
+        return general_search(self.__department, lambda d1: d1.getAux() > 0)
 
     def identify_patient(self, id, string):
         """
@@ -317,6 +325,11 @@ class HospitaRepository():
         return general_search(self.__department, lambda d1: d1.getAux() > 0)
 
     def check_group(self, groups) -> bool:
+        """
+        Checks if a group is valid
+        :param groups:
+        :return:
+        """
         for group in groups:
             disease = ""
             for patient in group:
@@ -326,8 +339,47 @@ class HospitaRepository():
                     return False
         return True
 
+
+
+    def check_group2(self, groups) -> bool:
+        list_g = []
+
+        for group in groups:
+            disease = ""
+            for patient in group:
+                if disease == "":
+                    disease = patient.getDs()
+                elif disease != patient.getDs():
+                    return False
+                if list_g.__contains__(disease):
+                    return False
+            list_g.append(disease)
+
+        return True
+
     def form_groups(self, index, k):
+        """
+        Forms the groups
+        :param index:
+        :param k:
+        :return:
+        """
         return(groups(self.__department[index].patients, k, self.check_group))
+
+
+    def form_groups_2(self, k ,p):
+        list_group = []
+
+
+        for i in range (k):
+            #to do
+            list_group.append(groups(self.__department[i].patients, p, self.check_group2))
+        return list_group
+
+
+
+
+
 
 
 
