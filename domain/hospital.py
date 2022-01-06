@@ -100,7 +100,16 @@ class Department():
         """
         self.aux = aux
 
-
+    def get_max_disease(self):
+        dis = {}
+        for patient in self.patients:
+            dis.setdefault(patient.getDs(),0)
+            dis[patient.getDs()] += 1
+        m = 0
+        for disease in dis:
+            if dis[disease] > m:
+                m = dis[disease]
+        return m
 
 
     def __repr__(self):

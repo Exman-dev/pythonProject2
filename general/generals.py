@@ -47,13 +47,18 @@ def generate_groups(original_list: list, k: int) -> list[list]:
         yield l
 
 
-def groups(original_list: list, k: int, test) -> list[list] | None:
+def groups(original_list: list, k: int, test, arg = None) -> list[list] | None:
     """
     Goes trough each group, tests it and returns the first valid group
 
     """
 
+    if arg:
+        f = lambda i: test(i, arg)
+    else:
+        f = lambda i: test(i)
+
     for group in generate_groups(original_list, k):
-        if test(group):
+        if f(group):
             return group
     return None

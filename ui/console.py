@@ -309,3 +309,5 @@ def run(controller: HospitalRepositoryController):
         print(ve)
     except IndexError as ie:
         print(ie)
+    except Exception as e:
+        print(e)
